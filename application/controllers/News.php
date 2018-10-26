@@ -16,10 +16,10 @@ class News extends CI_Controller {
                 $this->load->view('templates/header', $data);
                 $this->load->view('news/index', $data);
                 $this->load->view('templates/footer', $data);
-        }       
+        } //end of index method      
 
     
-    
+
         public function view($slug = NULL)
         {
                 $data['news_item'] = $this->news_model->get_news($slug);
@@ -34,8 +34,36 @@ class News extends CI_Controller {
                 $this->load->view('templates/header', $data);
                 $this->load->view('news/view', $data);
                 $this->load->view('templates/footer', $data);
-        }
+        }//end of function function view
 
     
     
-}
+        public function create()
+        {
+            $this->load->helper('form');
+            $this->load->library('form_validation');
+
+            $data['title'] = 'Create a news item';
+
+            $this->form_validation->set_rules('title', 'Title', 'required');
+            $this->form_validation->set_rules('text', 'Text', 'required');
+
+            if ($this->form_validation->run() === FALSE)
+            {   //show form
+                $this->load->view('templates/header', $data);
+                $this->load->view('news/create', $data);
+                $this->load->view('templates/footer', $data);
+
+            }
+            else
+            {// say thanks for entering data
+                $this->news_model->set_news();
+               // $this->load->view('news/success');
+                $this->load->view('templates/header', $data);
+                $this->load->view('news/success', $data);
+                $this->load->view('templates/footer', $data);
+
+            }
+        }//end of create method
+    
+}//end of news controller
